@@ -1,0 +1,8 @@
+- subir un archivo: git add archivo
+- hacer un commit: git commit -m "breve explicación"
+- Subirlo a github: git push origin master
+- Actualizar el directorio con lo que hay en el repositorio: git pull origin master
+- Ver el estado del directorio (ficheros sin hacer commit): git status
+- Clonar repositorio: git clone https://github.com/locobiedma/TFG-carlos-biedma-tapia.git
+- Borrar un fichero: git rm nombre-fichero
+
