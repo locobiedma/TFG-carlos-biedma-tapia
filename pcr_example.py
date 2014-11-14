@@ -11,14 +11,17 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from sklearn import cross_validation, linear_model
 
-##Read the data here
 fname = 'wild_boar_age_2.csv'
-wild_boar_data =pd.read_csv(fname,delimiter = ";") # this reads the data using panda
-#remove the first column which is only an id
-wild_boar_data = wild_boar_data.drop('Unnamed: 0', 1)
+wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
+#print str(wild_boar_data)
+
 wb_data = wild_boar_data.as_matrix()
+#print wb_data
 X = wb_data[:,2:]
+print X
 Y = wb_data[:,0]
+print Y
+#%%
 ##Let's suppose data are in X
 
 #1) Create a PCA object
