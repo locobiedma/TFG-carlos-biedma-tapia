@@ -25,10 +25,10 @@ from Bio.Restriction import BamHI
 #pydna.pcr
 
 plt.ioff()
-fname = 'hitters_data2.csv'
+fname = 'wild_boar_age_2.csv'
 wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
-#print str(wild_boar_data)
-
+print str(wild_boar_data)
+#%%
 
 wb_data = wild_boar_data.as_matrix()
 #print(wb_data)
