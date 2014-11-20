@@ -11,17 +11,18 @@ from sklearn.decomposition import PCA
 import pandas as pd
 from sklearn import cross_validation, linear_model
 
-fname = 'wild_boar_age_2.csv'
+fname = 'wild_boar_age.csv'
 wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 print str(wild_boar_data)
-#%%
+
 wb_data = wild_boar_data.as_matrix()
 #print wb_data
 X = wb_data[:,2:]
 print X
+
 Y = wb_data[:,0]
 print Y
-#%%
+
 ##Let's suppose data are in X
 
 #1) Create a PCA object
@@ -32,7 +33,7 @@ pca_ex = PCA()
 #2) Let's compute real pca
 
 pca_ex.fit(X)
-
+#%%
 #You should look at the help of pca from sklearn page and verify where are the projected
 #data. I think these are called scores in the book.
 
