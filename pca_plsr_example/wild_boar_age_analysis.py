@@ -38,10 +38,10 @@ plt.ioff()
 ###############################################################################
 
 #change d
-path = '/Users/obarquero/Dropbox/DavidUEX/WildBoar_Age/'
+path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
 
-fname = 'wild_boar_age_2.csv'
+fname = 'wild_boar_age.csv'
 data = np.genfromtxt(fname,delimiter = ";",skip_header = 1)
 
 #read the header
@@ -137,6 +137,7 @@ X_train_proj = pca_wild_b.transform(X_train_prepro)
 #First the loadings 
 print("loadings")
 
+#%%
 for i in range(pca_wild_b.n_components):
     plt.figure()
     plt.bar(np.arange(np.shape(X_train_prepro)[1]), pca_wild_b.components_[i])
@@ -149,6 +150,7 @@ for i in range(pca_wild_b.n_components):
     axis_c = plt.gca()
     axis_c.set_xticklabels(wild_boar_ddbb['header'][3:],fontsize = 7)
     axis_c.set_xticks(axis_c.get_xticks() + 0.5)
+#%%
 #sm.OLS()
 #Select the number of components using CV
 

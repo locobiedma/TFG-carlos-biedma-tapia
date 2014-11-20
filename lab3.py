@@ -14,7 +14,7 @@ from sklearn.decomposition import PCA
 #import statsmodels.formula.api as sm
 #import statsmodels.stats.outliers_influence as vif
 #import matplotlib.pylab as plt
-#from sklearn.cross_validation import train_test_split
+from sklearn.cross_validation import train_test_split
 #from sklearn.grid_search import GridSearchCV
 #import sklearn.metrics as metrics
 #from sklearn.svm import SVR
@@ -29,7 +29,7 @@ from sklearn import cross_validation
 #plt.ioff()
 path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
-fname = 'hitters_data.csv'
+fname = 'hitters_data2.csv'
 #wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
@@ -38,6 +38,10 @@ wild_boar_data = pd.read_table(fname,delimiter = ";")
 wb_data = wild_boar_data.as_matrix()
 #print(wb_data)
 
+#Scatter plots for each variable
+#for i in wild_boar_data.columns:
+ #   pd.tools.plotting.scatter_plot(wild_boar_data,i,'AtBat')
+#%%
 X = wb_data[:,2:]
 #print (X)
 
@@ -60,28 +64,29 @@ scores = list()
 scores_std = list()
 
 n_features = np.shape(Z)[1]
-print(n_features)
-#%%
-clf  = linear_model.LinearRegression()
-this_scores = cross_validation.cross_val_score(clf,Z[:,:1],Y,n_jobs = -1)
+#print(n_features)
+#print np.shape(Z)
 
 
 
 #%%
 #for over all n_features
 for m in range(n_features):
-    print m
+    #print Z[:m+1]
+    print "----------------------------------------------------------------------------"
     #Let compute a linear regression Y = w(T)Z using the first n_features
-    #clf = linear_model.LinearRegression()
     clf  = linear_model.LinearRegression()
     
     this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,n_jobs = -1)
-    
+    #print this_scores
     #Estimate the score using cross validation. 
     #You should check which is the score used
-    
-    #scores.append(np.mean(this_scores))
-    #scores_std.append(np.std(this_scores))
+    scores.append(np.mean(this_scores))
+    scores_std.append(np.std(this_scores)) #desviación estándar
+    #print scores_std
+
+plot(scores)
+
 
 #Now plot all the scores and select which is the number of components
 
