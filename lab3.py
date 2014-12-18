@@ -6,16 +6,10 @@ Created on Mon Oct 20 19:18:38 2014
 """
 
 #import numpy as np
-import os as os
 #import csv as csv
-import pandas as pd
-from sklearn.decomposition import PCA
-import numpy as np
 #import sklearn.preprocessing as prepro
 #import statsmodels.formula.api as sm
 #import statsmodels.stats.outliers_influence as vif
-import matplotlib.pylab as plt
-from sklearn.cross_validation import train_test_split
 #from sklearn.grid_search import GridSearchCV
 #import sklearn.metrics as metrics
 #from sklearn.svm import SVR
@@ -24,32 +18,46 @@ from sklearn.cross_validation import train_test_split
 #import pydna
 #from Bio.Restriction import BamHI
 #pydna.pcr
+import os as os
+import pandas as pd
+from sklearn.decomposition import PCA
+import numpy as np
+import matplotlib.pylab as plt
+from sklearn.cross_validation import train_test_split
 from sklearn import datasets, linear_model
 from sklearn import cross_validation
+import sklearn.preprocessing as prepro
 
 #plt.ioff()
-path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
+#path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
+path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
-fname = 'hitters_data2.csv'
-#wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
-wild_boar_data = pd.read_table(fname,delimiter = ";")
+#fname = 'hitters_data2.csv'
+fname = 'hitters_data3.csv'
+wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
+#wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
 
-
 wb_data = wild_boar_data.as_matrix()
-#print(wb_data)
+print(wb_data)
+#Normalizar datos
+scaler = prepro.StandardScaler()
+scaler.fit(wb_data)
+wb_data = scaler.transform(wb_data)
+#%%
+
 
 #Scatter plots for each variable
 #for i in wild_boar_data.columns:
  #   pd.tools.plotting.scatter_plot(wild_boar_data,i,'AtBat')
 #%%
 X = wb_data[:,2:]
-#print (X)
-
+print (X)
+#%%
 #print "------------------------------------"
 Y = wb_data[:,0]
 print(Y)
-
+#%%
 
 #1) Create a PCA object
 pca_ex = PCA()
@@ -114,6 +122,11 @@ pca_ex.pca_ex.explained_variance_ratio_[0]
 #4) Mi hipótesis es que hay primero que transformar los datos: centrarlos y normalizarlos
 #si le echas un vistazo al script que te adjunté yo verás cómo se realizar con un objeto
 #de sklearn que se llama preprocessing.
+
+
+
+#There should make pca in training data
+
 
 
 
