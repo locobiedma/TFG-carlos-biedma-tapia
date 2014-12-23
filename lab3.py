@@ -27,13 +27,15 @@ from sklearn.cross_validation import train_test_split
 from sklearn import datasets, linear_model
 from sklearn import cross_validation
 import sklearn.preprocessing as prepro
+from sklearn.metrics import mean_squared_error
+from matplotlib.pyplot import *
 
 #plt.ioff()
 #path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
 path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
-#fname = 'hitters_data2.csv'
-fname = 'hitters_data3.csv'
+fname = 'hitters_data2.csv'
+#fname = 'hitters_data3.csv'
 wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 #wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
@@ -69,7 +71,7 @@ Z = pca_ex.transform(X)
 #%%
 #print Z
 
-scores = list()
+scores = list() 
 scores_std = list()
 
 n_features = np.shape(Z)[1]
@@ -87,15 +89,24 @@ for m in range(n_features):
     clf  = linear_model.LinearRegression()
     
     this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,n_jobs = -1)
+      
+    #hay que pasarle tres vectores... El tercero es opcional  
+              #prueba = mean_squared_error(Z[:,:m+1],Y)
+    #score(X, y[, sample_weight])
     #print this_scores
     #Estimate the score using cross validation. 
     #You should check which is the score used
     scores.append(np.mean(this_scores))
+    print "scores es: " + str(np.mean(this_scores))
     scores_std.append(np.std(this_scores)) #desviación estándar
     #print scores_std
-
+#%%
 plt.plot(scores)
 plt.show()
+xlabel('Componentes')
+ylabel('R²')
+title("lab3")
+
 
 #Algo no estamos haciendo bien
 #
@@ -116,7 +127,7 @@ plt.show()
 #son equivalentes a los que obtienen en el lab3. Si miras los resultados de % variance
 #explained verás que usando una componente la varianza explicada es 38,31, sin embargo lo que
 # te da a tí es
-pca_ex.pca_ex.explained_variance_ratio_[0]
+pca_ex.explained_variance_ratio_[0]
 #99,9
 #Algo está mal
 #4) Mi hipótesis es que hay primero que transformar los datos: centrarlos y normalizarlos
