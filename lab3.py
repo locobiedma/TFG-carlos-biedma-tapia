@@ -27,18 +27,31 @@ from sklearn.cross_validation import train_test_split
 from sklearn import datasets, linear_model
 from sklearn import cross_validation
 import sklearn.preprocessing as prepro
-from sklearn.metrics import mean_squared_error
+from sklearn import metrics
 from matplotlib.pyplot import *
 
 #plt.ioff()
-#path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
-path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
+#path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
-fname = 'hitters_data2.csv'
+#fname = 'hitters_data2.csv'
 #fname = 'hitters_data3.csv'
-wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
+fname = 'hitters_data_original.csv'
+wild_boar_data = pd.read_csv(fname,delimiter = ",") # this reads the data using panda
 #wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
+
+#Let's codify the qualititatve variables as numerics.
+#League: N-0; A-1; Division and New League
+league_map = {'A':0,'N':1}
+wild_boar_data['League'] = wild_boar_data.League.map(league_map)
+
+division_map = {'W':0,'E':1}
+wild_boar_data['Division'] = wild_boar_data.Division.map(division_map)
+
+newleague_map = {'A':0,'N':1}
+wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
+
 
 wb_data = wild_boar_data.as_matrix()
 print(wb_data)
@@ -53,11 +66,12 @@ wb_data = scaler.transform(wb_data)
 #for i in wild_boar_data.columns:
  #   pd.tools.plotting.scatter_plot(wild_boar_data,i,'AtBat')
 #%%
-X = wb_data[:,2:]
-print (X)
+
+X = np.concatenate((wb_data[:,0:-2],wb_data[:,0:-1:]),axis = 1)
+print(X)
 #%%
 #print "------------------------------------"
-Y = wb_data[:,0]
+Y = wb_data[:,-2]
 print(Y)
 #%%
 
@@ -88,7 +102,7 @@ for m in range(n_features):
     #Let compute a linear regression Y = w(T)Z using the first n_features
     clf  = linear_model.LinearRegression()
     
-    this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,n_jobs = -1)
+    this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,scoring = 'mean_squared_error',n_jobs = -1)
       
     #hay que pasarle tres vectores... El tercero es opcional  
               #prueba = mean_squared_error(Z[:,:m+1],Y)
@@ -102,10 +116,13 @@ for m in range(n_features):
     #print scores_std
 #%%
 plt.plot(scores)
-plt.show()
 xlabel('Componentes')
-ylabel('R²')
+ylabel("$MSE$")
 title("lab3")
+plt.show()
+
+print "% Variance Explained (cumulative)"
+print np.cumsum(pca_ex.explained_variance_ratio_)
 
 
 #Algo no estamos haciendo bien
