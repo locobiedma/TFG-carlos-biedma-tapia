@@ -31,7 +31,7 @@ from sklearn import metrics
 from matplotlib.pyplot import *
 
 #plt.ioff()
-path = '/Users/obarquero/Qsync/TFGs/TFG_Carlos_Biedma/python_code/TFG-carlos-biedma-tapia/'
+path = '/home/carlos/TFG-carlos-biedma-tapia'
 #path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
 #fname = 'hitters_data2.csv'
@@ -54,7 +54,6 @@ wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
 
 
 wb_data = wild_boar_data.as_matrix()
-print(wb_data)
 #Normalizar datos
 scaler = prepro.StandardScaler()
 scaler.fit(wb_data)
@@ -67,8 +66,10 @@ wb_data = scaler.transform(wb_data)
  #   pd.tools.plotting.scatter_plot(wild_boar_data,i,'AtBat')
 #%%
 
-X = np.concatenate((wb_data[:,0:-2],wb_data[:,0:-1:]),axis = 1)
-print(X)
+X = np.concatenate((wb_data[:,0:-2],wb_data[:,0:-1:]),axis = 1) #¿Con esto te quitas la última columna?
+#print(X)
+X2 = wb_data[:,:]
+print X2
 #%%
 #print "------------------------------------"
 Y = wb_data[:,-2]
@@ -79,9 +80,9 @@ print(Y)
 pca_ex = PCA()
 
 #2) Let's compute real pca
-pca_ex.fit(X)
+pca_ex.fit(X2)
 
-Z = pca_ex.transform(X)
+Z = pca_ex.transform(X2)
 #%%
 #print Z
 
@@ -89,14 +90,15 @@ scores = list()
 scores_std = list()
 
 n_features = np.shape(Z)[1]
-#print(n_features)
-#print np.shape(Z)
+print(n_features)
+print np.shape(Z)
 
 
 
 #%%
 #for over all n_features
 for m in range(n_features):
+    print m
     #print Z[:m+1]
     print "----------------------------------------------------------------------------"
     #Let compute a linear regression Y = w(T)Z using the first n_features
