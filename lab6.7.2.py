@@ -1,19 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug  7 09:33:06 2014
+Created on Mon Jan 19 21:20:37 2015
 
-Script containing all the analysis to compare brt and svm estimating wild boar 
-age from dental measurements. 
-
-
-@author: Óscar Barquero Pérez mail to: oscar.barquero@urjc.es   
-         Rebeca Goya Esteban mail to: rebeca.goyaesteban@urjc.es
+@author: carlos
 """
-
-
-#########################
-# Importing modules
-#########################
 
 import numpy as np
 import os as os
@@ -30,85 +20,57 @@ import sklearn.metrics as metrics
 from sklearn.svm import SVR
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.cross_decomposition import PLSRegression
-
+#%%
 plt.ioff()
-###############################################################################
-# First step is to read the data from the text file. The first line inclues the names
-# of the variables.
-###############################################################################
-
-#change d
 path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
 
-fname = 'wild_boar_age.csv'
-data = np.genfromtxt(fname,delimiter = ";",skip_header = 1)
+fname = 'hitters_data_original.csv'
+wild_boar_data = pd.read_csv(fname,delimiter = ",") # this reads the data using panda
 
+data = np.genfromtxt(fname,delimiter = ";",skip_header = 1)
 #read the header
 f = open(fname, 'rU')
 reader = csv.reader(f,delimiter = ";")
 headers = reader.next()
-
-
 #Create a dic with the header names and a data fiel
 wild_boar_ddbb = {"header":headers,'data':data} 
 
-#print(wild_boar_ddbb)
+league_map = {'A':0,'N':1}
+wild_boar_data['League'] = wild_boar_data.League.map(league_map)
 
-###############################################################################
-#
-# Exploratory analysis
-#
-###############################################################################
+division_map = {'W':0,'E':1}
+wild_boar_data['Division'] = wild_boar_data.Division.map(division_map)
 
-#Some plots and distributions
-wild_boar_data =pd.read_csv(fname,delimiter = ";") # this reads the data using panda
-#remove the first column which is only an id
-wild_boar_data = wild_boar_data.drop('Unnamed: 0', 1)
-print(wild_boar_data.describe())
+newleague_map = {'A':0,'N':1}
+wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
 #%%
 #Scatter matrix
-pd.tools.plotting.scatter_matrix(wild_boar_data)
-
-#Scatter plots for each variable
-for i in wild_boar_data.columns:
-    pd.tools.plotting.scatter_plot(wild_boar_data,i,'Edad')
-
-#Boxplot with zone
-wild_boar_data.boxplot(column = ['Edad'],by = 'z')
-
-#Correlation matrix between variables
-
+#pd.tools.plotting.scatter_matrix(wild_boar_data)
 correlation_matrix = wild_boar_data.corr()
 print(correlation_matrix)
 
-
-#Assessing collinearity using the condition number
-
-model_fitted = sm.ols(formula = 'Edad ~ Abertura_A + Abertura_B + Raiz_A + Raiz_B + Superficie_A +Superficie_B ', data=wild_boar_data).fit() # this is the model
-
-print model_fitted.summary() #shows OLS regression output
-
 #Assessing multicollinearity using the variance inflation factor
 wb_data = wild_boar_data.as_matrix()
+#Normalizar datos
+scaler = prepro.StandardScaler()
+scaler.fit(wb_data)
+wb_data = scaler.transform(wb_data)
 X = wb_data[:,2:]
 Y = wb_data[:,0]
 zone = wb_data[:,1]
 vif_wild_boar = []
+
 for i in range(X.shape[1]):
     vif_wild_boar.append(vif.variance_inflation_factor(X,i))
-
+    
 print("######################################################################")
 print("Variance inflation factor")
 print vif_wild_boar
-
-
-###############################################################################
-#
-# Split train and test
-#
-###############################################################################
+#%%
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+
 ###############################################################################
 #
 # PCA and PLSR analysis 
@@ -125,18 +87,16 @@ X_train_prepro = scaler.transform(X_train)
 
 pca_wild_b = PCA()
 pca_wild_b.fit(X_train_prepro)
-
+#%%
 #keep the number of componets with 95% of the explained variance
 n_comps = np.sum(np.cumsum(pca_wild_b.explained_variance_ratio_)<=0.94)
 pca_wild_b = PCA(n_components = n_comps)
 pca_wild_b.fit(X_train_prepro)
 X_train_proj = pca_wild_b.transform(X_train_prepro)
 
-
 #Some scatter plots
 #First the loadings 
 print("loadings")
-
 #%%
 for i in range(pca_wild_b.n_components):
     plt.figure()
@@ -150,10 +110,10 @@ for i in range(pca_wild_b.n_components):
     axis_c = plt.gca()
     axis_c.set_xticklabels(wild_boar_ddbb['header'][3:],fontsize = 7)
     axis_c.set_xticks(axis_c.get_xticks() + 0.5)
-#%%
-#sm.OLS()
-#Select the number of components using CV
+    print "dentro del bucleeeeeeeeeee"
 
+#Select the number of components using CV
+#%%
 ##PLSR
 pls_wild_b = PLSRegression(n_components = 3)
 pls_wild_b.fit(X_train_prepro,Y_train)
@@ -174,42 +134,26 @@ for i in range(pls_wild_b.n_components):
     axis_c.set_xticks(axis_c.get_xticks() + 0.5)
     
 #Select the number of components using CV
-
-    
-    
-    
-    
-###############################################################################
-#
-# Regression models
-#
-###############################################################################    
+#%%
 regress_models = {'svm': SVR(kernel = 'rbf'),'brt':GradientBoostingRegressor(n_estimators=3000),
                   'svm_pca':SVR(kernel = 'rbf'),'brt_pca':GradientBoostingRegressor(n_estimators=3000),\
                   'svm_pcr':SVR(kernel = 'rbf'),'brt_pcr':GradientBoostingRegressor(n_estimators=3000),\
                   'svm_pls':SVR(kernel = 'rbf'),'brt_pls':GradientBoostingRegressor(n_estimators=3000),\
                   'svm_plsr':SVR(kernel = 'rbf'),'brt_plsr':GradientBoostingRegressor(n_estimators=3000)}
-################################################################################
-#
-# SVM regression
-#
-################################################################################
 
+#%%
 #Tuning parameters of SVM
 #tuned_parameters_svm = {'kernel': ['rbf'], 'gamma': np.logspace(-4, 2,40),'C': np.logspace(-2, 2, 40),'epsilon':np.logspace(-4,2,40)}
 tuned_parameters_svm = {'kernel': ['rbf'], 'gamma':[1e-3,1e-4],'C': [0.1,100,1000],'epsilon':[0.001,0.1]}
 
-
+#%%
 
  
 #evaluation metrics
 scorer = metrics.make_scorer(metrics.mean_squared_error,greater_is_better = False)
 
-#instantiate the svr
-
 clf = GridSearchCV(SVR(C=1), param_grid = tuned_parameters_svm, cv=5, scoring = scorer)
 clf.fit(X_train_proj,Y_train)
-
 
 print("Best parameters set found on development set:")
 print()
