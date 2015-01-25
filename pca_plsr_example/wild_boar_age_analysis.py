@@ -44,14 +44,14 @@ os.chdir(path)
 fname = 'wild_boar_age.csv'
 data = np.genfromtxt(fname,delimiter = ";",skip_header = 1)
 
-#read the header
+#read the header LO HE QUITADO
 f = open(fname, 'rU')
 reader = csv.reader(f,delimiter = ";")
 headers = reader.next()
 
 
 #Create a dic with the header names and a data fiel
-wild_boar_ddbb = {"header":headers,'data':data} 
+wild_boar_ddbb = {"header":headers,'data':data}  #LO HE QUITADO
 
 #print(wild_boar_ddbb)
 
@@ -90,7 +90,7 @@ model_fitted = sm.ols(formula = 'Edad ~ Abertura_A + Abertura_B + Raiz_A + Raiz_
 print model_fitted.summary() #shows OLS regression output
 
 #Assessing multicollinearity using the variance inflation factor
-wb_data = wild_boar_data.as_matrix()
+wb_data = wild_boar_data.as_matrix() #LO HE QUITADO
 X = wb_data[:,2:]
 Y = wb_data[:,0]
 zone = wb_data[:,1]

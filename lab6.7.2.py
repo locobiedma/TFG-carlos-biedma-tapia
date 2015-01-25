@@ -20,7 +20,7 @@ import sklearn.metrics as metrics
 from sklearn.svm import SVR
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.cross_decomposition import PLSRegression
-#%%
+
 plt.ioff()
 path = '/home/carlos/TFG-carlos-biedma-tapia'
 os.chdir(path)
@@ -28,12 +28,13 @@ os.chdir(path)
 fname = 'hitters_data_original.csv'
 wild_boar_data = pd.read_csv(fname,delimiter = ",") # this reads the data using panda
 
+
 data = np.genfromtxt(fname,delimiter = ";",skip_header = 1)
 #read the header
 f = open(fname, 'rU')
 reader = csv.reader(f,delimiter = ";")
 headers = reader.next()
-#Create a dic with the header names and a data fiel
+#Create a dic with the header names and a data fiel ¿Esto no se si lo necesito?
 wild_boar_ddbb = {"header":headers,'data':data} 
 
 league_map = {'A':0,'N':1}
@@ -44,11 +45,7 @@ wild_boar_data['Division'] = wild_boar_data.Division.map(division_map)
 
 newleague_map = {'A':0,'N':1}
 wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
-#%%
-#Scatter matrix
-#pd.tools.plotting.scatter_matrix(wild_boar_data)
-correlation_matrix = wild_boar_data.corr()
-print(correlation_matrix)
+
 
 #Assessing multicollinearity using the variance inflation factor
 wb_data = wild_boar_data.as_matrix()
@@ -59,15 +56,7 @@ wb_data = scaler.transform(wb_data)
 X = wb_data[:,2:]
 Y = wb_data[:,0]
 zone = wb_data[:,1]
-vif_wild_boar = []
 
-for i in range(X.shape[1]):
-    vif_wild_boar.append(vif.variance_inflation_factor(X,i))
-    
-print("######################################################################")
-print("Variance inflation factor")
-print vif_wild_boar
-#%%
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
 
 
@@ -87,17 +76,19 @@ X_train_prepro = scaler.transform(X_train)
 
 pca_wild_b = PCA()
 pca_wild_b.fit(X_train_prepro)
-#%%
+
 #keep the number of componets with 95% of the explained variance
-n_comps = np.sum(np.cumsum(pca_wild_b.explained_variance_ratio_)<=0.94)
+n_comps = np.sum(np.cumsum(pca_wild_b.explained_variance_ratio_)<=0.94) #salen 8
+
 pca_wild_b = PCA(n_components = n_comps)
 pca_wild_b.fit(X_train_prepro)
 X_train_proj = pca_wild_b.transform(X_train_prepro)
 
 #Some scatter plots
 #First the loadings 
-print("loadings")
-#%%
+
+
+#ESTO CREO QUE TAMPOCO LO VOY A NECESITAR.
 for i in range(pca_wild_b.n_components):
     plt.figure()
     plt.bar(np.arange(np.shape(X_train_prepro)[1]), pca_wild_b.components_[i])
