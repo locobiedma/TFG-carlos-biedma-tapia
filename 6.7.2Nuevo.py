@@ -61,7 +61,7 @@ scaler.fit(wb_data)
 wb_data = scaler.transform(wb_data)
 #%%
 
-X = np.concatenate((wb_data[:,0:-2],wb_data[:,0:-1:]),axis = 1) #¿Con esto te quitas la última columna?
+X = np.concatenate((wb_data[:,0:-2],wb_data[:,-1:]),axis = 1) #¿Con esto te quitas la última columna?
 #print(X)
 X2 = wb_data[:,:]
 #print X2
@@ -70,9 +70,9 @@ X2 = wb_data[:,:]
 Y = wb_data[:,-2]
 #print(Y)
 #%%
-pls_wild_b = PLSRegression(n_components = 20) #No sé que número poner.
-pls_wild_b.fit(X2,Y)
-Z = pls_wild_b.transform(X2)
+pls_wild_b = PLSRegression(n_components = 19) #No sé que número poner.
+pls_wild_b.fit(X,Y)
+Z = pls_wild_b.transform(X)
 
 
 scores = list() 
@@ -103,9 +103,9 @@ for m in range(n_features):
     #print this_scores
     #Estimate the score using cross validation. 
     #You should check which is the score used
-    scores.append(np.mean(this_scores))
-    print "scores es: " + str(np.mean(this_scores))
-    scores_std.append(np.std(this_scores)) #desviación estándar
+    scores.append(np.mean(-this_scores))
+    print "scores es: " + str(np.mean(-this_scores))
+    scores_std.append(np.std(-this_scores)) #desviación estándar
     #print scores_std
 #%%
 plt.plot(scores)

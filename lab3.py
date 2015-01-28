@@ -66,7 +66,7 @@ wb_data = scaler.transform(wb_data)
  #   pd.tools.plotting.scatter_plot(wild_boar_data,i,'AtBat')
 #%%
 
-X = np.concatenate((wb_data[:,0:-2],wb_data[:,0:-1:]),axis = 1) #¿Con esto te quitas la última columna?
+X = np.concatenate((wb_data[:,0:-2],wb_data[:,-1:]),axis = 1) #¿Con esto te quitas la última columna?
 #print(X)
 X2 = wb_data[:,:]
 print X2
@@ -80,9 +80,9 @@ print(Y)
 pca_ex = PCA()
 
 #2) Let's compute real pca
-pca_ex.fit(X2) #Este creo que no lo uso para nada; Fit the model with X.
+pca_ex.fit(X) #Este creo que no lo uso para nada; Fit the model with X.
 
-Z = pca_ex.transform(X2) #Apply the dimensionality reduction on X; 
+Z = pca_ex.transform(X) #Apply the dimensionality reduction on X; 
 #X is projected on the first principal components previous extracted from a training set.
 #%%
 #print Z
@@ -115,9 +115,9 @@ for m in range(n_features):
     #print this_scores
     #Estimate the score using cross validation. 
     #You should check which is the score used
-    scores.append(np.mean(this_scores))
-    print "scores es: " + str(np.mean(this_scores))
-    scores_std.append(np.std(this_scores)) #desviación estándar
+    scores.append(np.mean(-this_scores))
+    print "scores es: " + str(np.mean(-this_scores))
+    scores_std.append(np.std(-this_scores)) #desviación estándar
     #print scores_std
 #%%
 plt.plot(scores)
