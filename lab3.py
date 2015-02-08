@@ -31,13 +31,15 @@ from sklearn import metrics
 from matplotlib.pyplot import *
 
 #plt.ioff()
-path = '/home/carlos/TFG-carlos-biedma-tapia'
 #path = '/home/carlos/TFG-carlos-biedma-tapia'
+#path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = '/Users/obarquero/Escritorio/tfg_carlos_biedma/TFG-carlos-biedma-tapia/'
+path = './'
 os.chdir(path)
 #fname = 'hitters_data2.csv'
 #fname = 'hitters_data3.csv'
-fname = 'hitters_data_original.csv'
-wild_boar_data = pd.read_csv(fname,delimiter = ",") # this reads the data using panda
+fname = 'hitters.csv'
+wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 #wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
 
@@ -54,6 +56,7 @@ wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
 
 
 wb_data = wild_boar_data.as_matrix()
+Y = wb_data[:,-2]
 #Normalizar datos
 scaler = prepro.StandardScaler()
 scaler.fit(wb_data)
@@ -72,7 +75,7 @@ X2 = wb_data[:,:]
 print X2
 #%%
 #print "------------------------------------"
-Y = wb_data[:,-2]
+#Y = wb_data[:,-2]
 print(Y)
 #%%
 
@@ -98,14 +101,17 @@ print np.shape(Z)
 
 #%%
 #for over all n_features
-for m in range(n_features):
+for m in range(n_features+1):
     print m
     #print Z[:m+1]
     print "----------------------------------------------------------------------------"
     #Let compute a linear regression Y = w(T)Z using the first n_features
     clf  = linear_model.LinearRegression()
-    
-    this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,scoring = 'mean_squared_error',n_jobs = -1)
+    if m == 0:
+        unos = unos = np.ones((np.shape(Y)[0],1))
+        this_scores = cross_validation.cross_val_score(clf,unos,Y,scoring = 'mean_squared_error',n_jobs = -1)
+    else:
+        this_scores = cross_validation.cross_val_score(clf,Z[:,:m],Y,scoring = 'mean_squared_error',n_jobs = -1)
       
       
     #scores = cross_validation.cross_val_score(svr, diabetes.data, diabetes.target, cv=5, scoring='mean_squared_error')  
@@ -124,11 +130,11 @@ plt.plot(scores)
 xlabel('Componentes')
 ylabel("$MSE$")
 title("lab3")
-plt.show()
+
 
 print "% Variance Explained (cumulative)"
 print np.cumsum(pca_ex.explained_variance_ratio_)
-
+plt.show()
 
 #Algo no estamos haciendo bien
 #
