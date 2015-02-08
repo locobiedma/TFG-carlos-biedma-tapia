@@ -1,0 +1,249 @@
+\documentclass[12pt,a4paper,Spanish]{book}
+%Va a ser un libro (book), el tamaño es a4, la lengua castellano%%%
+
+\usepackage[spanish]{babel} %palabras de multitud de idiomas. Aquí no se si 
+\usepackage[utf8]{inputenc} %cambio latin por utf-8
+\usepackage{amsmath} %macros AM
+\usepackage{amsthm} %macros AMS para teoremas.
+\usepackage{amsfonts} %Permite usar fuentes.
+\usepackage[dvips]{epsfig} %Inclusión de figuras postscript
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\setlength{\parskip}{8mm} %Separación entre parrafos 
+
+
+\DeclareGraphicsExtensions{.jpg, .pdf, .png, .gif, .eps}
+
+\author{Carlos Biedma Tapia / Óscar Barquero}
+\title{TFG análisis de datos...}
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\listoffigures
+
+\chapter{Tipos de aprendizaje}
+
+En este trabajo trataremos de encontrar la relación entre una o varias variables de entrada (variables independientes,variables características o predictores) y una o varias de salida (variable dependiente o respuesta). El estudio de esta relación se puede realizar con dos objetivos principales:
+
+
+\begin{itemize}
+\item Estudiar cuales son las variables de entrada que más afectan a la salida, cuál es la relación entre la salida y cada una de las variables de entrada, saber si se pueden relacionar con una ecuación lineal o no... 
+
+\item Predecir la salida en función de unos valores de entrada.
+\end{itemize}
+
+De un modo más general, si tenemos \textit{p} predictors en el estudio de un problema  
+$X_1,X_2,...,X_p,$ asumimos que existe cierta relación entre dichas variables de entrada y la salida \textit{Y} que puede expresarse de la forma:
+
+\begin{equation}
+Y=f(x)+e
+\end{equation}
+
+Donde \textit{f} es una función desconocida de \textit{X} y \textit{e} es el término de error irreducible de estimación. Dicho error aparece por cualquier causa relacionada con el problema estadístico en el que nos encontremos, como por ejemplo el estado de los pacientes en la consulta de un médico, el tiempo atmosférico en el estudio de cultivos agrarios...
+
+Este tipo de problemas se engloban dentro de los denominados problemas de \textit{aprendizaje supervisado}. El objetivo del aprendizaje supervisado es el de crear una función después de haber visto una serie de ejemplos, denominados \textit{datos de entrenamiento}. Trata de ajustar un modelo que relacione la salida con la entrada, con el objetivo de poder predecir respuestas para futuras obervaciones, ya sea sobre datos numéricos o de cualquier otra clase, o entender la relación entre ambas.
+
+Por otro lado, el otro tipo principal de problemas estadísticos son los denominados problemas de \textit{aprendizaje no supervisado}. En este tipo de problemas, no estamos interesados en la predicción de un valor de salida, ya que no tenemos una variable de salida \textit{Y}. Más bien, nuestro interés radica en descubrir relaciones interesantes sobre los datos de entrada. Como por ejemplo descubrir la mejor forma para visualizar los datos, descubrir grupos o subgrupos entre las medidas...
+
+Los problemas no supervisados requieren una interpretación bajo un punto de vista mucho más subjetivo que los supervisados. Al no partir de un objetivo claro como podría ser la predicción de un valor de salida o ajustar el modelo mediente una función \textit{f} que dependa de los datos de entrada, es difícil evaluarlo de acuerdo a unos resultados concretos, ya que no existe una respuesta absoluta o perfecta a su problema.
+
+Los problemas no supervisados tienen una gran importancia en la aplicación de multitud de ciencias como el estudio de pacientes con riesgo de cáncer, estudios de mercado, etc; y se han escrito infinidad de artículos científicos sobre su uso.
+
+
+
+\chapter{PCA: Análisis de componentes principales}
+
+Análisis de componentes principales o PCA es una técnica utilizada en los problemas en los que la matriz original de los datos de entrada \textit{X} está compuesta por multitud de variables características o predictors. El objetivo de esta técnica está en reducir la dimensionalidad del conjunto de datos \textit{X} y así simplificar en la medida de lo posible la complejidad del problema y al mismo tiempo permitir una visualización de los datos de entrada perdiendo la menor cantidad de información posible.
+
+A las nuevas variables de entrada se las denomina \textit{componentes principales}, y son aquellas que logran albergar la mayor variabilidad posible de los datos de entrada, o lo que es lo mismo, la mayor varianza.
+
+PCA es una técnica estadística no supervisada, ya que únicamente opera sobre unos datos de entrada \textit{X} y no tiene ninguna salida \textit{Y} asociada. 
+
+
+\section{¿Por qué PCA?}
+
+Cuando se recoge la información de una muestra de datos, lo más frecuente es tomar el
+mayor número posible de variables (variables características o predictores \textit{p}). Sin embargo, si tomamos demasiadas variables sobre
+un conjunto de objetos, por ejemplo 20 variables, tendremos que considerar $20 \choose 2$ = 180 
+posibles coeficientes de correlación; si son 40 variables dicho número aumenta hasta 780.
+Evidentemente, en este caso es difícil visualizar relaciones entre las variables.
+
+Además, otro problema que suele surgir en la toma de medidas estadísticas es la fuerte correlación que suele existir entre muchas de estas variables. Lo normal es que estén relacionadas o que midan lo mismo bajo distintos puntos de vista. Por ejemplo, en
+estudios médicos, la presión sanguínea a la salida del corazón y a la salida de los pulmones
+están fuertemente relacionadas. 
+
+Por tanto, surge la necesidad de reducir el número de variables de entrada y así disminuir la complejidad del problema.
+
+
+\section{Componentes principales}
+
+Las \textit{p} variables originales de la matriz \textit{X} correlacionadas  entre sí se pueden transformar en otro conjunto de nuevas variables incorreladas entre sí (que no tenga repetición o redundancia en la información). A estas nuevas variables las denominamos \textit{componentes principales}.
+
+Estas nuevas variables serán combinaciones lineales de las \textbf{p} variables anteriores, y se construyen según el orden de importancia en cuanto a la variabilidad total que recogen. Es decir, la primera componente principal $Z_1$ será aquella que mayor variabilidad recoja en sus datos, $Z_2$ la segunda y así sucesivamente. Es importante resaltar el hecho de que el concepto de mayor variabilidad se relaciona con el de mayor información o varianza. Cuanto mayor sea la variabilidad de los datos (varianza) se considera que existe mayor información, lo cual está relacionado con el concepto de entropía.
+
+Matemáticamente, la primera componente principal se expresa de la manera:
+
+\begin{equation}
+Z_1=\phi_{11}X_1 + \phi_{21}X_2 + ... + \phi_{p1}X_p
+\end{equation}
+
+Los componentes $\phi_{11},...,\phi_{p1}$ son los denominados \textit{coeficientes de la primera componente principal}. Juntos, estos coeficientes construyen el vector de la primera componente princial, $(\phi_{11}, \phi_{21},...,\phi_{p1})^T$. Este vector define la dirección en el espacio sobre la que los datos varían más. Aquí podría explicar lo de la varianza o no...
+
+Dada una matriz \textit{n x p}, la primera componente principal se puede construir a partir de combinaciones lineales de las muestras de la matriz de la forma:
+
+\begin{equation}
+Z_{i1}=\phi_{11}X_{i1} + \phi_{21}X_{i2} + ... + \phi_{p1}X_{ip}
+\end{equation}
+
+Donde $Z_{11},...,Z_{n1}$ son los valores de la primera componente principal. Por tanto, una proyección de las muestras originales de la matriz sobre el vector de la primera componente principal, los valores proyectados serían $Z_{11},...,Z_{n1}$. 
+
+Una vez calculada la primera componente principal $Z_1$, podemos calcular la segunda componente principal $Z_2$. Esta segunda componente principal se construye a partir de combinaciones lineales de las variables características de la matriz original $X_1,...,X_p$ (al igual que la primera componente principal) de modo que la variable obtenida $Z_2$, esté incorrelada con $Z_1$. Como puede suponerse, los valores de esta segunda componente principal se calculan del mismo modo que los de la primera componente $Z_1$:
+
+\begin{equation}
+Z_{i2}=\phi_{12}X_{i1} + \phi_{22}X_{i2} + ... + \phi_{p2}X_{ip}
+\end{equation}
+
+Donde $\phi_{2}$ compone el vector de la segunda componente principal.
+
+Como se ha mencionado antes, $Z_1$ y $Z_2$ están incorreladas entre sí. Esto supone al mismo tiempo que las direcciones de los vectores $\phi_{1}$ y $\phi_{2}$ son perpendiculares uno respecto al otro.
+
+Otra intrepretación distinta de las componentes principales, y aquizá algo más sencilla, es la siguiente:
+
+El vector de la primera componente principal es aquel vector que está lo más cerca posible de los datos originales (teniendo en cuanta la distancia euclidiana como medida de "cerca"). Aquí poner la imagen 6.15, página 234.
+
+En consecuencia, la primera y segunda componente principal componen el plano que está lo más cerca posible a las muestras originales, las tres primeras componentes principales componen el cubo más ajustado a los datos y así sucesivamente.
+
+Aquí poner la imagen 10.2 de la página 384
+
+
+Un concepto muy importante al hablar de PCA es el de la varianza explicada. Nos interesa saber cuanta información estamos perdiendo al reducir la dimensionalidad de los datos, o lo que es lo mismo, cuanta información conseguimos captar en cada nueva componente. Recordamos que el concepto de información está íntimamente ligado con el de varianza.
+
+La varianza explicada en un conjunto de datos cualquiera se calcula de la forma:
+
+\begin{equation}
+\sum_{j=1}^{p}Var(X_j) = \sum_{j=1}^{p}\dfrac{1}{n}\sum_{i=1}^{n}X_{ij}^2
+\end{equation}
+
+Y la varianza explicada para una componente principal cualquiera se calcula de la manera:
+
+\begin{equation}
+\dfrac{1}{n}\sum_{i=1}^{n}Z_{im}^2 = \dfrac{1}{n}\sum_{i=1}^{n}\left(\sum_{j=1}^{p}\phi_{jm}X_{ij}\right)^2
+\end{equation}
+
+Este valor nos es extremadamente útil para decidir cuantas componentes principales son requeridas para un problema estadístico concreto. Por regla general, nos interesa elegir el mínimo número de componentes posible que garanticen una varianza explicada mínima. Para ello, podemos hacer uso de una representación gráfica en la que se muestra el número de componentes frente a la varianza explicada. Sin embargo, no existe una respuesta absoluta al problema de cuantas componentes principales escoger, y dependerá del criterio escogido y la finalidad del estudio (\textit{aprendizaje no supervisado}).
+
+Poner imagenes de la página 388 y explicarla
+
+Como es lógico, al calcular la varianza explicada nos daremos cuanta de que la primera componente principal es la que recoge la mayor parte de la información de los datos, y que a medida que el número de la componente aumenta, la varianza explicada por dicha componente es cada vez menor. Al final, la suma de todas las varianzas explicadas por cada una de las componentes supondrá el 100\% del total.
+
+\chapter{PCR: Principal Components Regression}
+
+Principal Components Regression se basa en la aplicación de PCA sobre una matriz de muestras originales para despues realizar un modelo de regresión lineal sobre las nuevas dimensiones de los datos.
+
+Recordando el capítulo anterior, cada componente principal $Z_m$ se puede calcular como una combinación lineal de los predictores originales de la forma:
+
+\begin{equation}
+Z_m=\sum_{j=1}^{p}\phi_{jm}X_{j}
+\end{equation}
+
+Con estas componentes principales podemos ajustar el modelo de regresión lineal:
+
+\begin{equation}
+y_i = \theta_0+\sum_{m=1}^{M}\theta_mz_{im}+e_i,      
+\end{equation}
+
+Con $i=1,...,n$. Automáticamente nos damos cuenta de que gracias al uso de PCA, hemos reducido la complejidad del problema considerablemente, pues hemos pasado de tener que estimar $p+1$ coeficientes de regresión a $m+1$ coeficientes nuevos, siendo $m<p$. La idea principal de este método es que un número pequeño de componentes principales es suficiente para recoger la mayor parte de la información de los datos originales, así como su relación con la variable de salida \textit{Y}.
+
+En la página 237 explican lo del overfitting pero no me acuerdo lo que era, tengo que buscarlo.
+
+Al aplicar PCR sobre una matriz de datos es importante estandarizar los predictores antes de calcular las nuevas componentes principales. De este modo se garantiza que todas las variables están en la misma escala. En caso contrario, se puede obtener un efecto negativo al aplicar el modelo debido al mayor peso que se le conceden a las vaviables \textit{p} con mayor varianza.
+
+\section{Cross Validation}
+
+Cross Validation (\textit{CV}) es una técnica de remuestreo ampliamente utilizada en la estadística moderna para validar la calidad de un modelo de regresión lineal. Se basa en ajustar el modelo múltiples veces, cada una de ellas con un conjunto de valores de entrenamiento distinto. Lógicamente, este método conlleva una gran carga computacional, pero nos permite obtener mejores resultados gracias a la información adicional que obtenemos al repetir el proceso en repetidas ocasiones con muestras distintas de la variable original.
+
+
+En esta sección hablaremos de tres técnicas distintas para la aplicación de \textit{CV}:
+
+\subsection{The Validation Set Approach}
+
+Este método es el más sencillo de todos y por tanto el que menos carga computacional conlleva. La idea es simple, consiste en dividir el conjunto de muestras en dos partes iguales, una de ellas para el conjunto de entrenamiento y la otra para el conjunto de validación. Como es de esperar, el conjunto de entrenamiento se emplea para ajustar el modelo de regresión lineal, mientras que el conjunto de validación nos sirve para predecir los valores de salida de nuestro modelo ya ajustado. Con estos valores estimados calcularemos la calidad de nuestro modelo a través del \textit{MSE} (en el caso de tener variables cuantitaticas).
+
+Uno de los inconvenientes que nos encontramos en este método es el grado de aleatoriedad al que está sometido. Al dividir el conjunto de muestras en dos grupos de manera totalmente aleatoria, nos damos cuenta de que el valor de MSE obtenido será distinto en función de las muestras que se encuentren en cada uno de estos dos grupos. Es decir, si realizáramos el proceso repetidas veces, cada vez con dos grupos de entrenamiento y validación distintos, obtendremos distintos valores de MSE, y por tanto no tendremos una medida absoluta de la calidad de nuestro modelo.
+
+
+\subsection{Leave-One-Out Cross-Validation}
+
+Leave-one-out cross-validation \textit{(LOOCV)} consiste en una mejora del \textit{The Validation Set Approach} Aquí poner referencia al anterior. En este caso, el conjunto de muestras también se divide en dos grupos de muestras distintos (entrenamiento y validación), pero la diferencia radica en que en este caso estos dos grupos no serán del mismo tamaño. Por el contrario, el conjunto de validación estará constituido por una única muestra, mientras que todas las restantes formarán parte del grupo de entrenamiento.
+
+Este proceso se repite \textit{n} veces, de tal forma que en cada iteración la muestra de validación será distinta. De este modo, al final del proceso todas las muestras originales habrán formado el conjunto de validación y se habrán hecho \textit{n} estimaciones de la variable de salida. Además, en cada una de estas iteraciónes de calculará el \textit{MSE} a partir de la muestra de validación \textit{i}:
+
+\begin{equation}
+MSE_i=(y_i-\hat{y}_i)^2
+\end{equation}
+
+Y el coeficiente de \textit{CV} final será igual al promedio de todos los \textit{MSE} calculados:
+
+\begin{equation}
+CV=\dfrac{1}{n}\sum_{i=1}^{n}MSE_i
+\end{equation}
+
+La principal ventaja de este modelo es la reducción considerabla del error de estimación. Al estar usando un número mucho mayor de muestras para el ajuste del modelo, es de esperar que los resultados sean mucho mejores y por tanto la muestra estimada sea mucho más parecida a la real en comparación con el Validation Set Approach.
+
+Además, este proceso ya no está sujeto a ningún grado de aleatoriedad, pues al aplicar el algoritmo \textit{n} veces y usar cada muestra como muestra de validación, el resultado final será siempre el mismo para un conjunto dado de observaciones.
+
+
+
+\subsection{k-Fold Cross-Validation}
+
+k-Fold Cross-Validation es un proceso intermedio entre Validation Set Approach y LOOCV. En este caso, el conjunto de muestra se divide en \textit{k} grupos de igual tamaño. Una vez tenemos estos grupos creados, el proceso es muy similar al del LOOCV. Se itera el proceso \textit{k} veces, considerándose en cada una de estas iteraciones un grupo distinto como muestras de validación del modelo, quedándo el resto \textit{(k-1)} de los grupos como muestras de entrenamiento. De este modo, el coeficiente de \textit{CV} final será:
+
+\begin{equation}
+CV=\dfrac{1}{k}\sum_{i=1}^{k}MSE_i
+\end{equation}
+
+Lógicamente, este método no obtendrá tan buenos resultados en el ajuste del modelo como LOOCV, pero por otra parte, será mucho menos costoso computacionalmente, ya que el número de iteraciones que se realizan es mucho menor.
+
+\chapter{PLS: Partial Least Squares}
+
+\section{Libro}
+
+Como hemos estudiado anteriormente, PCR realiza una reducción de los \textit{p} predictors originales de una manera no supervisada, es decir, no hace uso de la variable de salida \textit{Y}. Esto significa que aunque PCR nos proporciona una reducción de la dimensionalidad del problema para la visualización y estudio de los datos de entrada, no tiene por qué ofrecernos la mejor combinación para la predicción del valor de salida \textit{Y}.
+
+PLS se presenta como una variación de PCR en la que las nuevas variables características $Z_1,Z_2,...,Z_m$ se siguen obteniendo a partir de combinaciones lineales de las variables de entrada pero en este caso se obtienen de una manera supervisada, es decir, haciendo uso de las variable de salida \textit{Y}.
+
+
+\section{1900 Helland, WILEY}
+
+En este estudio se tratará de responder a la siquiente pregunta: ¿Cuándo PLS funciona bien para predecir y cuando no? Este tema se ha estudiado mucho en muchas y distintas investigaciones.
+
+Partimos de la situción en la que 
+
+
+
+
+%%%%%BIBLIOGRAFÍA%%%%%%%%%%%%%%%
+\begin{thebibliography}{99}
+	\bibitem{Libro_Visual} Francisco Javier Ceballos: Enciclopedia de Microsoft 	Visual Basic. Editorial Ra-Ma. Madrid, 1999.
+	\bibitem{PHPBuch} Dieter Staas: PHP 5 Espresso!. Franzis Verlag GmbH.
+	Poing, 2004.
+	\bibitem{Ralph} Ralph Pfeiffer. Diplomarbeit: Planung und
+	Erstellung einer im Höhenwinkel nachführbaren Photovoltaikanlage
+	sowie Reali
+	\bibitem{Lars}Lars Ortlieb, Diplomarbeit: Vernetzung alternativer
+	Energiesysteme unter Verwendung moderner Kommunikationstechnik,
+	Fachhochs
+	\bibitem{Schuamcher} Mike Schumacher. Datentechnische Erfassung einer
+	nachgeführten Photovoltaikanlage in einem alternativen
+	Energieverbund mittels modern
+	\bibitem{TAC} TAC Xenta 511 Engineering Manual
+	\bibitem{TACWeb} TAC Web-Seite: \url{http://www.tac-global.com}
+	\bibitem{PHP} PHP Web-Seite: \url{http://www.php.net}
+\end{thebibliography}
+
+\end{document}
