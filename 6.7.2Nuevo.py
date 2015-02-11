@@ -127,9 +127,9 @@ ylabel("$MSE$")
 title("6.7.2")
 plt.show()
 
-num_comp = np.argmin(scores)
+n_c = np.argmin(scores)
 
-pls_pred = PLSRegression(n_components =2)
+pls_pred = PLSRegression(n_components = n_c)
 pls_pred.fit(X,Y)
 y_pred_test = pls_pred.predict(X_test_tot)
 
