@@ -18,3 +18,13 @@ pcr.fit = pcr(Salary~., data = Hitters, scale = TRUE, validation = "CV")
 summary(pcr.fit)
 
 validationplot(pcr.fit,val.type = "MSEP")
+
+
+
+######obtain plsr
+set.seed(1)
+train = sample(c(TRUE,FALSE),nrow(Hitters),rep = TRUE)
+test = (!train)
+pls.fit = plsr(Salary~. , data = Hitters, subset = train,scale = TRUE,validation = "CV")
+summary(pls.fit)
+validationplot(pls.fit, val.type= "MSEP")

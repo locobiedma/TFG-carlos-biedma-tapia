@@ -24,6 +24,7 @@ from sklearn.decomposition import PCA
 import numpy as np
 import matplotlib.pylab as plt
 from sklearn.cross_validation import train_test_split
+from sklearn.cross_validation import KFold
 from sklearn import datasets, linear_model
 from sklearn import cross_validation
 import sklearn.preprocessing as prepro
@@ -34,11 +35,13 @@ from sklearn.cross_decomposition import PLSRegression
 #plt.ioff()
 path = '/home/carlos/TFG-carlos-biedma-tapia'
 #path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = './'
 os.chdir(path)
 #fname = 'hitters_data2.csv'
 #fname = 'hitters_data3.csv'
-fname = 'hitters_data_original.csv'
-wild_boar_data = pd.read_csv(fname,delimiter = ",") # this reads the data using panda
+#fname = 'hitters_data_original.csv'
+fname = 'hitters.csv'
+wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 #wild_boar_data = pd.read_table(fname,delimiter = ";")
 #print str(wild_boar_data)
 
@@ -55,6 +58,7 @@ wild_boar_data['NewLeague'] = wild_boar_data.NewLeague.map(newleague_map)
 
 
 wb_data = wild_boar_data.as_matrix()
+Y = wb_data[:,-2]
 #Normalizar datos
 scaler = prepro.StandardScaler()
 scaler.fit(wb_data)
@@ -67,7 +71,7 @@ X2 = wb_data[:,:]
 #print X2
 #%%
 #print "------------------------------------"
-Y = wb_data[:,-2]
+#Y = wb_data[:,-2]
 #print(Y)
 #%%
 pls_wild_b = PLSRegression(n_components = 19) #No sé que número poner.
@@ -78,34 +82,43 @@ Z = pls_wild_b.transform(X)
 scores = list() 
 scores_std = list()
 
-n_features = np.shape(Z)[1]
+n_features = np.shape(X)[1]
+
 print(n_features) #¿Aquí no debería ser un numero menor de 20?
-print np.shape(Z)
+print np.shape(X)
 
+X_orig = X.copy()
+Y_orig = Y.copy()
 
-
+X,X_test_tot, Y, Y_test_tot = cross_validation.train_test_split(X,Y,test_size = 0.5,random_state = 0)
+N = np.shape(X)[0]
 #%%
 #for over all n_features
-for m in range(n_features):
-    print m
-    #print Z[:m+1]
-    print "----------------------------------------------------------------------------"
-    #Let compute a linear regression Y = w(T)Z using the first n_features
-    clf  = linear_model.LinearRegression()
+for num_comp in range(n_features):
     
-    this_scores = cross_validation.cross_val_score(clf,Z[:,:m+1],Y,scoring = 'mean_squared_error',n_jobs = -1)
-      
-      
-    #scores = cross_validation.cross_val_score(svr, diabetes.data, diabetes.target, cv=5, scoring='mean_squared_error')  
-    #hay que pasarle tres vectores... El tercero es opcional  
-              #prueba = mean_squared_error(Z[:,:m+1],Y)
-    #score(X, y[, sample_weight])
-    #print this_scores
-    #Estimate the score using cross validation. 
-    #You should check which is the score used
-    scores.append(np.mean(-this_scores))
-    print "scores es: " + str(np.mean(-this_scores))
-    scores_std.append(np.std(-this_scores)) #desviación estándar
+    kf = KFold(N,n_folds=10)
+    aux_scores = list()
+    for train, test in kf:
+        X_train, X_test, y_train, y_test = X[train], X[test], Y[train], Y[test]
+          
+        if num_comp == 0:
+            y_pred = np.mean(y_test)
+            y_pred = y_pred* np.ones(np.shape(y_test))
+            aux_scores.append(metrics.mean_squared_error(y_test,y_pred))
+        
+        else:
+            pls_foo = PLSRegression(n_components = num_comp)                        
+            pls_foo.fit(X_train,y_train)
+            y_pred = pls_foo.predict(X_test)
+        
+            #obtaing the score
+            this_score = metrics.mean_squared_error(y_test,y_pred)
+            aux_scores.append(this_score)
+        
+    #compute the total score for this number of components
+    scores.append(np.mean(aux_scores))
+    scores_std.append(np.std(aux_scores))
+    #desviación estándar
     #print scores_std
 #%%
 plt.plot(scores)
@@ -114,11 +127,18 @@ ylabel("$MSE$")
 title("6.7.2")
 plt.show()
 
-print "% Variance Explained (cumulative)"
-print np.cumsum(pca_ex.explained_variance_ratio_)
+num_comp = np.argmin(scores)
+
+pls_pred = PLSRegression(n_components =2)
+pls_pred.fit(X,Y)
+y_pred_test = pls_pred.predict(X_test_tot)
+
+print "MSE test = " + str(metrics.mean_squared_error(Y_test_tot,y_pred_test))
+#print "% Variance Explained (cumulative)"
+#print np.cumsum(pca_ex.explained_variance_ratio_)
 
 
-pca_ex.explained_variance_ratio_[0]
+#pca_ex.explained_variance_ratio_[0]
 
 
 
