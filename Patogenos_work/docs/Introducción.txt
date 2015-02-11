@@ -1,0 +1,37 @@
+Introducción  complejo respiratorio porcino:
+
+El complejo respiratorio porcino es un síndrome respiratorio ocasionado por varios microorganismos y cuyo desarrollo está influido por la presencia de determiandos factores ambientales, (Ta, Humedad, ...) o factores intrínsecos del animal (edad, estado inmunológico, ...). Por lo tanto, se considera una enfermedad multifactorial cuyo desarrollo dependerá tanto d ela presencia de determinados patógenos como de la presencia de algunos de los factores anteriormente mencionados.
+
+Este síndrome no ha sido estudiado anteriormente en el jabalí.
+
+Los obejtivos de este trabajo serán: 
+
+(1) Determinar la presencia de patógenos respiratorios en el jabalí
+
+(2) Estudiar las alteraciones lesionales que estos patógenos, por si sólos o interaccionando con otros, producen en los pulmones de los animales infectados.
+
+Planteamineto estadístico
+
+Variable Respuesta
+Las variables respuesta van a ser los diferentes parámetros lesionales medidos en los pulmones de los animales estudadiodos: Preibronquitits, Neumonía intersticial, Necrosis, Bronquitis, Pleuritis, ...
+
+El objetivo es comprobar como la presencia de patógenos respiratorios modifica estas variables lesionales. Todas las variables lesionales son numéricas (pero discretas). En cada animal se realiza una valoración lesional para cada parámetro que va de 0 a 6 dependiendo de la gravedad.
+
+
+Variables Explicativas
+
+Tendremos dos tipos de variables explicativas.
+
+(1) El primero serán los patógenos  (PCRMycoPul, PCRHaemoPulPCRAPPPul, PCRPCVPul, ELISAADV, ELISAPRRS, ELISAInfluenza, Metastrongilus_Class) Todas estas son variables categoricas con dos categorias en cada animal: positivo o negativo
+
+(2)El segundo serán los factores que pueden influir en las repercusiones que estos pat?genos tienen en los pulmones infectados: Dentro de estas s´lo tengo clara la edad, pero iremos añadiendo otras como podría ser la variable finca (ya que cada finca tiene diferentes condiciones ambientales y de manejo) o densidad poblacional(aunque esta variable ya iría incluida si metemos la varible finca). Tengo que pensarlo. De momento solo edad.
+
+Este en principio es el planteamiento del trabajo. A continuación te hago la exploración de los datos
+por tree models que es lo que nosotros solemos hacer habitualmente.
+
+
+Primeramente realizamos el tree model introduciendo todas las variables explicativas que
+incluyen en este caso a todos los pat?genos pulmonares que hemos estudiado y la edad
+como factor importante del individuo. El tree model nos ir? agrupando los individuos basandose
+utilizando las variables explicativas buscando una mayor diferencia de la variable respuesta entre
+los diferentes grupos que forme. 
