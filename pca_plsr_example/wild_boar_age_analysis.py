@@ -38,7 +38,8 @@ plt.ioff()
 ###############################################################################
 
 #change d
-path = '/home/carlos/TFG-carlos-biedma-tapia'
+#path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = '/Users/obarquero/Documents/TFGs/TFG-carlos-biedma-tapia'
 os.chdir(path)
 
 fname = 'wild_boar_age.csv'

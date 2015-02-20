@@ -20,7 +20,8 @@ from matplotlib.pyplot import *
 from sklearn.cross_decomposition import PLSRegression
 from pandas import concat
 
-path = '/home/carlos/TFG-carlos-biedma-tapia'
+#path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = '/Users/obarquero/Documents/TFGs/TFG-carlos-biedma-tapia'
 os.chdir(path)
 fname = 'Respiratorio.csv'
 animales = pd.read_csv(fname,delimiter = ",", index_col=0) # this reads the data using panda
@@ -54,9 +55,10 @@ Necrosis = animales['Necrosis']
 animales = concat([edad, ELISAInfluenza, ELISAPRRS, ELISAADV, PCRMycoPul, PCRHaemoPul, PCRAPPPul, PCRPCVPul, Metastronguilus_Clas, NIntersticial, Pleuritis, Peribronquitis, Bronquitis, Necrosis], axis=1) 
 animales = animales.dropna()
 
-animales.describe()
-animales.mean()
-animales.var()
+
+print animales.describe()
+print animales.mean()
+print animales.var()
 animales.std()
 animales.corr()
 animales.cov()
