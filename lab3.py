@@ -41,7 +41,7 @@ os.chdir(path)
 fname = 'hitters.csv'
 wild_boar_data = pd.read_csv(fname,delimiter = ";") # this reads the data using panda
 #wild_boar_data = pd.read_table(fname,delimiter = ";")
-#print str(wild_boar_data)
+print str(wild_boar_data)
 
 #Let's codify the qualititatve variables as numerics.
 #League: N-0; A-1; Division and New League

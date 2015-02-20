@@ -217,15 +217,80 @@ Como hemos estudiado anteriormente, PCR realiza una reducción de los \textit{p}
 
 PLS se presenta como una variación de PCR en la que las nuevas variables características $Z_1,Z_2,...,Z_m$ se siguen obteniendo a partir de combinaciones lineales de las variables de entrada pero en este caso se obtienen de una manera supervisada, es decir, haciendo uso de las variable de salida \textit{Y}.
 
+¿Cómo funciona PLS?
 
-\section{1900 Helland, WILEY}
+Al igual que en el caso de PCR, PLS parte de la siguiente aproximación:
 
-En este estudio se tratará de responder a la siquiente pregunta: ¿Cuándo PLS funciona bien para predecir y cuando no? Este tema se ha estudiado mucho en muchas y distintas investigaciones.
+\begin{equation}
+Y = XB+residual
+\end{equation}
 
-Partimos de la situción en la que 
+O lo que es lo mismo:
+\begin{equation}
+Y = b_0 + b_1x_1 + b_2x_2 + ... + b_Nx_N
+\end{equation}
 
 
+Estimamos \textit{Y} a partir de combinaciones lineales de la matriz de observaciones original \textit{X} y el conjunto de coeficientes \textit{B}.
 
+Por notación algebraica sabemos que podemos despejar \textit{B} de la siguiente manera:
+
+\begin{equation}
+\begin{split} 
+X^{-1}XB=X^{-1}Y\\
+IB=X^{-1}Y\\
+B=X^{-1}Y
+\end{split} 
+\end{equation}
+
+Una vez despejada la matriz de coeficientes \textit{B}, aplicando la propiedad de la matriz de...(preguntar a Óscar como se llamaba):
+
+\begin{equation}
+\begin{split} 
+(X^{T} X) B = (X^{T} X) X^{-1} Y \\
+(X^{T} X) B = X^{T} I Y \\
+(X^{T} X) B = X^{T} Y \\
+(X^{T} X)^{-1} (X^{T}X) B = (X^{T} X)^{-1} X^{T} Y \\
+I B = (X^{T} X)^{-1} X^{T} Y 
+\end{split} 
+\end{equation}
+
+Finalmente obtenemos: 
+
+\begin{equation}
+B = (X^{T} X)^{-1} X^{T} Y
+\end{equation}
+
+Esta última ecuación nos proporciona una sencilla solución para obtener la matriz de coeficientes \textit{B}. Sin embargo, en ocasiones esta expresión no nos proporciona buenos resultados debido al comportamiento de las observaciones de \textit{X} (explicar lo de la alta correlación entre variables...).
+
+Por ello, se plantea una solución alternativa en la que no estimamos \textit{Y} a partir de \textit{X} directamente, sino que realizamos un paso intermedio. La estimación de \textit{Y} se realiza a través de una nueva matriz de coeficientes \textit{T} con unas condiciones más favorables que las que tenía \textit{X}. Esto es:
+
+\begin{equation}
+Y = TC
+\end{equation}
+
+O lo que es lo mismo:
+
+\begin{equation}
+Y = c_0 + c_1t_1 + c_2t_2 + ... + c_Nt_N
+\end{equation}
+
+A su vez, cada componente de \textit{T} ($t_1, t_2,..., t_k$) está compuesto por una combinación lineal de \textit{X}:
+
+\begin{equation}
+\begin{split} 
+t_k = X w_k \\
+t_k = w_k^0 + w_k^1 X_1 + w_k^2 X_2 + ... + w_k^N X_N
+\end{split} 
+\end{equation}
+
+Por tanto, al final nos damos cuenta como \textit{Y} se estima a partir de una combinación lineal que a su vez está formada por otra combinación lineal en la que todas las componentes de \textit{X} están implicadas:
+
+\begin{equation}
+Y = c_0 + c_1(X w_1) + c_2(X w_2) + ... + c_N(X w_N)  
+\end{equation}
+
+(No entiendo muy bien en esta última fórmula si hace uso de Y para estimar, la última transparencia del 2015-1 tb la quiero preguntar).
 
 %%%%%BIBLIOGRAFÍA%%%%%%%%%%%%%%%
 \begin{thebibliography}{99}
