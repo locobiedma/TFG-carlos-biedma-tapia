@@ -69,7 +69,7 @@ wild_boar_data = wild_boar_data.drop('Unnamed: 0', 1)
 print(wild_boar_data.describe())
 #%%
 #Scatter matrix
-pd.tools.plotting.scatter_matrix(wild_boar_data)
+pd.tools.plotting.scatter_matrix(wild_boar_data, figsize=(6, 6))
 
 #Scatter plots for each variable
 for i in wild_boar_data.columns:
