@@ -62,7 +62,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join('/home/carlos/estimadorPatrones/estimadorPatrones','plantillas'),
+    os.path.join('/home/carlos/TFG-carlos-biedma-tapia/estimadorPatrones/estimadorPatrones','plantillas'),
 )
 
 

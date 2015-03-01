@@ -17,10 +17,12 @@ def saludar(request):
 		edad = str(request.POST.get("edad"))
 		print "densidad es: " + str(request.POST.get("densidad"))
 		densidad = str(request.POST.get("densidad"))
+		print "tipo es: " + str(request.POST.get("sex"))
+		tipo = str(request.POST.get("sex"))
 
 		if (edad != '' and densidad != ''):
 			media = mediar(edad,densidad)
-			respuesta = "la media es: " + str(media)
+			respuesta = "la media es: " + str(media) + "y el tipo es: " + tipo
 		else:
 			respuesta = "parametros incorrectos"
 

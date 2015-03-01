@@ -1,70 +1,84 @@
 <!DOCTYPE html>
 <html lang='es'>
-	<head>
-  		<title>TFG Carlos Biedma</title>
-  		<meta charset='utf-8'>
-  		<style type="text/css">
-  			body{
-  				background-color: forestGreen;
-  			}
-    		#banner {
-      			color: purple;
-		      	width: 100%;
-		   	  	height: 200px;
-		   	  	background: url('https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSJGNHIrUpERX2Q4lI7pu6KaYTV0GoIAsxgSx_FNdXcHGeOTXsZ') 50% 50% no-repeat;
-		      	background-size: cover;
-		      	border-radius: 10px;
-		      	box-shadow: 0 0 57px #ddd;
-    		}
-    		#cabecera{
-    			color: darkBlue;
-    			padding-top: 20px;
-    			padding-left: 20px;
-    		}
-    		#formulario{
-    			width: 400px;
-    			padding-left: 60px;
-    		}
+  <head>
+    <title>TFG Carlos Biedma</title>
+    <meta charset='utf-8'>
+    <style type="text/css">
+      body{
+        background-color: forestGreen;
+      }
+      #banner {
+        color: purple;
+        width: 100%;
+        height: 200px;
+        background: url('https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSJGNHIrUpERX2Q4lI7pu6KaYTV0GoIAsxgSx_FNdXcHGeOTXsZ') 50% 50% no-repeat;
+        background-size: cover;
+        border-radius: 10px;
+        box-shadow: 0 0 57px #ddd;
+      }
+      #cabecera{
+        color: darkBlue;
+        padding-top: 20px;
+        padding-left: 20px;
+      }
+      #formulario{
+        width: 400px;
+        padding-left: 60px;
+      }
 
-    		#titulo{
-    			color: black;
-    			padding-left: 40px;
-    		}
+      #formulario2{
+        width: 400px;
+        padding-left: 60px;
+      }
 
-    		#respuesta{
-    			border: solid;
-    			padding-left: 60px;
-    		}
+      #modelo{
+        color: black;
+        padding-left: 40px;
+      }
 
-  		</style>
-  	</head>
+      #titulo{
+        color: black;
+        padding-left: 40px;
+      }
 
-  	<body>
-    	<div id = 'banner'>
-    		<div id = 'cabecera'>
-    			<h1>ESTIMADOR PATRONES</h1>
-    		</div>	
-		</div>
-		<div id = 'titulo'> 
-			<h1>Introduce tus parámetros:</h1> 
-		</div>
-    	
-    	<div id = formulario>
-	    	<form action="." method="post">{% csrf_token %}
-	        	Edad: <br>
-	        	<input type="text" name="edad" value="" /> <br>
-	        	Densidad: <br>
-	        	<input type="text" name="densidad" value="" /> <br>
-	        	Condición corporal:<br>
-	        	<input type="text" name="condicionCorporal" value="" /> <br><br>
-	        	<input type="submit" name="boton" value="Estimar" />
-	        	<br>
-	        	<br>
-	    	</form>
-    	</div>
-    	<div id = 'respuesta'>
-    		{{nombre}}
-    	</div>
-    	
-  	</body>
+      #respuesta{
+        border: solid;
+        padding-left: 60px;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id = 'banner'>
+      <div id = 'cabecera'>
+        <h1>ESTIMADOR PATRONES</h1>
+      </div>  
+    </div>
+
+    <div id = 'titulo'> 
+      <h1>Introduce tus parámetros:</h1> 
+    </div>
+      
+    <div id = formulario>
+      <form action="." method="post">{% csrf_token %}
+        <input type="radio" name="sex" value="PRS" checked>PCR
+        <br>
+        <input type="radio" name="sex" value="PLS">PLS<br><br>
+        Edad: <br>
+        <input type="text" name="edad" value="" /> <br>
+        Densidad: <br>
+        <input type="text" name="densidad" value="" /> <br>
+        Condición corporal:<br>
+        <input type="text" name="condicionCorporal" value="" /> <br><br>
+        <input type="submit" name="boton" value="Estimar" />
+        <br>
+        <br>
+      </form>
+    </div>
+
+    <div id = 'respuesta'>
+      {{nombre}}
+    </div>  
+  </body>
 </html>
