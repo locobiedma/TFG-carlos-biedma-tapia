@@ -21,50 +21,70 @@ from sklearn.cross_decomposition import PLSRegression
 from pandas import concat
 import matplotlib.pyplot as plt
 
+import statsmodels.api as sm_g
 import scipy.stats as st
 import statsmodels.formula.api as sm
 
 
 #path = '/home/carlos/TFG-carlos-biedma-tapia'
-path = '/home/carlos/TFG-carlos-biedma-tapia'
+#path = '/home/carlos/TFG-carlos-biedma-tapia'
+path = '/Users/obarquero/Documents/TFGs/TFG-carlos-biedma-tapia/Patogenos_work/data/'
 os.chdir(path)
-fname = 'Respiratorio.csv'
-animales = pd.read_csv(fname,delimiter = ",", index_col=0) # this reads the data using panda
+fname = 'tfg_respiratorio.csv'
+animales = pd.read_csv(fname,delimiter = ";", index_col=0) # this reads the data using panda
 
 
 
 Cambio = {'Positivo':1,'Negativo':0}
 Cambio2 = {'Macho':1,'Hembra':0}
 
-animales['ELISAPCV2'] = animales.ELISAPCV2.map(Cambio)
-animales['ELISAADV'] = animales.ELISAADV.map(Cambio)
-animales['Sexo'] = animales.Sexo.map(Cambio2)
-animales['ELISAPPV'] = animales.ELISAPPV.map(Cambio)
-animales['ELISAPCV'] = animales.ELISAPCV.map(Cambio)
-animales['TB'] = animales.TB.map(Cambio)
-
-
-
-
-#animales['ELISAInfluenza'] = animales.ELISAInfluenza.map(Cambio)
-#animales['ELISAPRRS'] = animales.ELISAPRRS.map(Cambio)
+#animales['ELISAPCV2'] = animales.ELISAPCV2.map(Cambio)
 #animales['ELISAADV'] = animales.ELISAADV.map(Cambio)
-#animales['PCRMycoPul'] = animales.PCRMycoPul.map(Cambio)
-#animales['PCRHaemoPul'] = animales.PCRHaemoPul.map(Cambio)
-#animales['PCRAPPPul'] = animales.PCRAPPPul.map(Cambio)
-#animales['PCRPCVPul'] = animales.PCRPCVPul.map(Cambio)
-#animales['Metastronguilus_Clas'] = animales.Metastronguilus_Clas.map(Cambio)
+#animales['Sexo'] = animales.Sexo.map(Cambio2)
+#animales['ELISAPPV'] = animales.ELISAPPV.map(Cambio)
+#animales['ELISAPCV'] = animales.ELISAPCV.map(Cambio)
+#animales['TB'] = animales.TB.map(Cambio)
+#
+#Densidad = animales['Densidad'] 
+#edad = animales['Edad']
+#CondicionCorporal = animales['CondicionCorporal']
+#
+#ELISAPCV2 = animales['ELISAPCV2']
+#Sexo = animales['Sexo']
+#ELISAADV = animales['ELISAADV']
+#ELISAPPV = animales['ELISAPPV']
+#ELISAPCV = animales['ELISAPCV']
+#TB = animales['TB']
 
-Densidad = animales['Densidad'] 
-edad = animales['Edad']
-CondicionCorporal = animales['CondicionCorporal']
+#Working with the new ddbb
+animales['Mhyo'] = animales.Mhyo.map(Cambio)
+animales['ADV'] = animales.ADV.map(Cambio)
+animales['SIV'] = animales.SIV.map(Cambio)
+animales['HPS'] = animales.HPS.map(Cambio)
+animales['APP'] = animales.APP.map(Cambio)
+animales['PCV'] = animales.PCV.map(Cambio)
+animales['PM'] = animales.PM.map(Cambio)
+animales['Sexo'] = animales.Sexo.map(Cambio2)
 
-ELISAPCV2 = animales['ELISAPCV2']
+
 Sexo = animales['Sexo']
-ELISAADV = animales['ELISAADV']
-ELISAPPV = animales['ELISAPPV']
-ELISAPCV = animales['ELISAPCV']
-TB = animales['TB']
+edad = animales['Edad']
+mhyo = animales['Mhyo']
+adv = animales['ADV']
+siv = animales['SIV']
+hps = animales['HPS']
+app = animales['APP']
+pcv = animales['PCV']
+pm = animales['PM']
+metast = animales['Metastrongylus']
+pi = animales['Peribronquitis']
+
+#old data
+#animales = concat([Densidad, edad, CondicionCorporal, ELISAPCV2, Sexo, ELISAADV, ELISAPPV, ELISAPCV, TB], axis=1) 
+#new data
+animales = concat([Sexo,edad, mhyo, adv, siv, hps, app, pcv, pm,metast,pi], axis=1) 
+animales = animales.dropna()
+
 #ELISAInfluenza = animales['ELISAInfluenza']
 #ELISAPRRS = animales['ELISAPRRS']
 #ELISAADV = animales['ELISAADV']
@@ -79,54 +99,93 @@ TB = animales['TB']
 #Bronquitis = animales['Bronquitis']
 #Necrosis = animales['Necrosis']
 
-animales = concat([Densidad, edad, CondicionCorporal, ELISAPCV2, Sexo, ELISAADV, ELISAPPV, ELISAPCV, TB], axis=1) 
-animales = animales.dropna()
+#animales = concat([Densidad, edad, CondicionCorporal, ELISAPCV2, Sexo, ELISAADV, ELISAPPV, ELISAPCV, TB], axis=1) 
+#animales = animales.dropna()
 
-
-ELISAPCV2 = pd.Categorical.from_array(animales['ELISAPCV2'])
-animales['ELISAPCV2'] = ELISAPCV2.labels # insert in dataframe
 
 Sexo = pd.Categorical.from_array(animales['Sexo'])
-animales['Sexo'] = Sexo.labels # insert in dataframe
+animales['Sexo'] = Sexo.labels #inset in dataframe
+#ELISAPCV2 = pd.Categorical.from_array(animales['ELISAPCV2'])
+#animales['ELISAPCV2'] = ELISAPCV2.labels # insert in dataframe
 
-ELISAADV = pd.Categorical.from_array(animales['ELISAADV'])
-animales['ELISAADV'] = ELISAADV.labels # insert in dataframe
+Mhyo = pd.Categorical.from_array(animales['Mhyo'])
+animales['Mhyo'] = Mhyo.labels #inset in dataframe
+#Sexo = pd.Categorical.from_array(animales['Sexo'])
+#animales['Sexo'] = Sexo.labels # insert in dataframe
 
-ELISAPPV = pd.Categorical.from_array(animales['ELISAPPV'])
-animales['ELISAPPV'] = ELISAPPV.labels # insert in dataframe
+adv = pd.Categorical.from_array(animales['ADV'])
+animales['ADV'] = adv.labels #inset in dataframe
+#ELISAADV = pd.Categorical.from_array(animales['ELISAADV'])
+#animales['ELISAADV'] = ELISAADV.labels # insert in dataframe
 
-ELISAPCV = pd.Categorical.from_array(animales['ELISAPCV'])
-animales['ELISAPCV'] = ELISAPCV.labels # insert in dataframe
+siv= pd.Categorical.from_array(animales['SIV'])
+animales['SIV'] = siv.labels #inset in dataframe
+#ELISAPPV = pd.Categorical.from_array(animales['ELISAPPV'])
+#animales['ELISAPPV'] = ELISAPPV.labels # insert in dataframe
 
+hps = pd.Categorical.from_array(animales['HPS'])
+animales['HPS'] = hps.labels #inset in dataframe
+#ELISAPCV = pd.Categorical.from_array(animales['ELISAPCV'])
+#animales['ELISAPCV'] = ELISAPCV.labels # insert in dataframe
 
-TB = pd.Categorical.from_array(animales['TB']) # default order: alphabetical
-animales['TB'] = TB.labels # insert in dataframe
+app = pd.Categorical.from_array(animales['APP'])
+animales['APP'] = app.labels #inset in dataframe
+pcv = pd.Categorical.from_array(animales['PCV'])
+animales['PCV'] = pcv.labels #inset in dataframe
+pm = pd.Categorical.from_array(animales['PM'])
+animales['PM'] = pm.labels #inset in dataframe
+#TB = pd.Categorical.from_array(animales['TB']) # default order: alphabetical
+#animales['TB'] = TB.labels # insert in dataframe
 
+periobronquitis = animales['Peribronquitis']
 animales = animales.dropna()
 
 #%%
+
+#histograma de la salida
+
+#Let's work by groups
+
+g_s = animales.groupby('Sexo')
+print g_s.Peribronquitis.describe()
+
+#age plot scatter plot
+pd.tools.plotting.scatter_plot(animales,'Edad','Peribronquitis')
+
+g_mh = animales.groupby('Mhyo')
+print g_mh.Peribronquitis.describe()
+
+g_adv = animales.groupby('ADV')
+print g_adv.Peribronquitis.describe()
+
+#make the same for the rest of the binary variables
+
+pd.tools.plotting.scatter_plot(animales,'Metastrongylus','Peribronquitis')
 #############BOXPLOT#############
 #¿No debería hacer tb los boxplot sin enfrentar las variables,
 #sino haciéndolo independientes?
-animales.boxplot(column = 'Edad',by = 'TB', grid=True)
-animales.boxplot(column = 'CondicionCorporal',by = 'TB', grid=True)
-animales.boxplot(column = 'Densidad',by = 'TB', grid=True)
+#animales.boxplot(column = 'Edad',by = 'TB', grid=True)
+animales.boxplot(column = 'Peribronquitis',by = 'Sexo', grid=True)
+animales.boxplot(column = 'Peribronquitis',by = 'Mhyo', grid=True)
+animales.boxplot(column = 'Peribronquitis',by = 'ADV', grid=True)
+
+#make the same for the rest of binary variables
 
 
 
 #%%
-#############TABLAS CONTINGENCIA#############
-pd.crosstab(animales['TB'], animales['ELISAPCV2'])
-pd.crosstab(animales['TB'], animales['Sexo'])
-pd.crosstab(animales['TB'], animales['ELISAADV'])
-pd.crosstab(animales['TB'], animales['ELISAPPV'])
-pd.crosstab(animales['TB'], animales['ELISAPCV'])
+##############TABLAS CONTINGENCIA#############
+#pd.crosstab(animales['TB'], animales['ELISAPCV2'])
+#pd.crosstab(animales['TB'], animales['Sexo'])
+#pd.crosstab(animales['TB'], animales['ELISAADV'])
+#pd.crosstab(animales['TB'], animales['ELISAPPV'])
+#pd.crosstab(animales['TB'], animales['ELISAPCV'])
 
 
 #%%
 #############Matriz Correlaciones#############
 for i in animales.columns:
-    pd.tools.plotting.scatter_plot(animales,i,'TB') #esto es un ejemplo
+    pd.tools.plotting.scatter_plot(animales,i,'Peribronquitis') #esto es un ejemplo
 
 #Estas gráficas salen fatal no se aprecian los detalles.
 #No sé como cambiar la posición de los ejes.    
@@ -137,17 +196,15 @@ matriz_correlacion = animales.corr()
 print matriz_correlacion
 
 #%%
-#############Modelo OLS#############
-model_fitted = sm.ols(formula = 'Edad ~ Densidad + CondicionCorporal', data=animales).fit() # this is the model
-print model_fitted.summary() #shows OLS regression output
+
 
 #%%
 #Al hacer esto me dice que hay mucha correlación
-est = sm.OLS(animales['TB'],animales)
-est = est.fit()
+est = sm.ols(formula = 'Peribronquitis ~ Sexo + Edad+Mhyo + ADV + SIV + HPS+ APP + PCV + PM + Metastrongylus',data = animales).fit()
+#est = est.fit()
 print est.summary()
 
-sm.graphics.plot_partregress(animales, data=animales, obs_labels=False)
+sm_g.graphics.plot_partregress_grid(est)
 
 #%%
 
@@ -166,6 +223,8 @@ animales.head()
 animales.count() #devuelve los no Nulos
 animales.columns
 #%%
+
+############Change this to be adequate the new data
 animalesMatriz = animales.as_matrix()
 
 Y = animalesMatriz[:,-5:]
