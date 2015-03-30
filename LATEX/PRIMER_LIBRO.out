@@ -1,11 +1,12 @@
-\BOOKMARK [0][-]{chapter.1}{Tipos de aprendizaje}{}% 1
-\BOOKMARK [0][-]{chapter.2}{PCA: An\341lisis de componentes principales}{}% 2
-\BOOKMARK [1][-]{section.2.1}{\277Por qu\351 PCA?}{chapter.2}% 3
-\BOOKMARK [1][-]{section.2.2}{Componentes principales}{chapter.2}% 4
-\BOOKMARK [0][-]{chapter.3}{PCR: Principal Components Regression}{}% 5
-\BOOKMARK [1][-]{section.3.1}{Cross Validation}{chapter.3}% 6
-\BOOKMARK [2][-]{subsection.3.1.1}{The Validation Set Approach}{section.3.1}% 7
-\BOOKMARK [2][-]{subsection.3.1.2}{Leave-One-Out Cross-Validation}{section.3.1}% 8
-\BOOKMARK [2][-]{subsection.3.1.3}{k-Fold Cross-Validation}{section.3.1}% 9
-\BOOKMARK [0][-]{chapter.4}{PLS: Partial Least Squares}{}% 10
-\BOOKMARK [1][-]{section.4.1}{Libro}{chapter.4}% 11
+\BOOKMARK [0][-]{chapter.1}{Introducci\363n}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Tipos de aprendizaje}{}% 2
+\BOOKMARK [0][-]{chapter.3}{PCA: An\341lisis de componentes principales}{}% 3
+\BOOKMARK [1][-]{section.3.1}{\277Por qu\351 PCA?}{chapter.3}% 4
+\BOOKMARK [1][-]{section.3.2}{Componentes principales}{chapter.3}% 5
+\BOOKMARK [0][-]{chapter.4}{PCR: Principal Components Regression}{}% 6
+\BOOKMARK [1][-]{section.4.1}{Cross Validation}{chapter.4}% 7
+\BOOKMARK [2][-]{subsection.4.1.1}{The Validation Set Approach}{section.4.1}% 8
+\BOOKMARK [2][-]{subsection.4.1.2}{Leave-One-Out Cross-Validation}{section.4.1}% 9
+\BOOKMARK [2][-]{subsection.4.1.3}{k-Fold Cross-Validation}{section.4.1}% 10
+\BOOKMARK [0][-]{chapter.5}{PLS: Partial Least Squares}{}% 11
+\BOOKMARK [1][-]{section.5.1}{Libro}{chapter.5}% 12
